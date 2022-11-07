@@ -14,7 +14,7 @@
     <maven.compiler.target>17</maven.compiler.target>
 
     <jar.dir>${project.build.directory}/jars</jar.dir>
-    <test.argLine>--upgrade-module-path='${jar.dir}/truffle-api.jar' --add-opens org.graalvm.sdk/org.graalvm.polyglot=ALL-UNNAMED --add-exports java.base/jdk.internal.module=ALL-UNNAMED</test.argLine>
+    <test.argLine>--upgrade-module-path=${jar.dir}/truffle-api.jar --add-opens org.graalvm.sdk/org.graalvm.polyglot=ALL-UNNAMED --add-exports java.base/jdk.internal.module=ALL-UNNAMED</test.argLine>
   </properties>
   <build>
     <plugins>
@@ -115,8 +115,14 @@
   <dependencies>
     <dependency><groupId>junit</groupId><artifactId>junit</artifactId><version>4.13.1</version><scope>test</scope></dependency>
 
-    <dependency><groupId>org.graalvm.truffle</groupId><artifactId>truffle-api</artifactId><version>${graalvm.version}</version></dependency>
-    <dependency><groupId>org.graalvm.truffle</groupId><artifactId>truffle-dsl-processor</artifactId><version>${graalvm.version}</version><scope>provided</scope></dependency>
-    <dependency><groupId>org.graalvm.truffle</groupId><artifactId>truffle-tck</artifactId><version>${graalvm.version}</version><scope>provided</scope></dependency>
+    <dependency><groupId>org.graalvm.truffle</groupId><artifactId>truffle-api</artifactId><version>${graalvm.version}</version>
+      <exclusions><exclusion><groupId>org.graalvm.sdk</groupId><artifactId>graal-sdk</artifactId></exclusion></exclusions>
+    </dependency>
+    <dependency><groupId>org.graalvm.truffle</groupId><artifactId>truffle-dsl-processor</artifactId><version>${graalvm.version}</version><scope>provided</scope>
+      <exclusions><exclusion><groupId>org.graalvm.sdk</groupId><artifactId>graal-sdk</artifactId></exclusion></exclusions>
+    </dependency>
+    <dependency><groupId>org.graalvm.truffle</groupId><artifactId>truffle-tck</artifactId><version>${graalvm.version}</version><scope>provided</scope>
+      <exclusions><exclusion><groupId>org.graalvm.sdk</groupId><artifactId>graal-sdk</artifactId></exclusion></exclusions>
+    </dependency>
   </dependencies>
 </project>
