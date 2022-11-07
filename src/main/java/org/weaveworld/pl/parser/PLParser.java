@@ -65,7 +65,7 @@ public class PLParser extends Parse{
   public Object ws(){ return skipWhitespaces(); }    
   
   public WNode value(){ WNode r;
-    if( number(this, b, true)){ String s=b();
+    if( number(this, b, false)){ String s=b();
 //      if(s.contains(".") || s.contains("e")) r=Double.parseDouble(s);
 //      else 
       r=new WValInteger(Integer.parseInt(s));
@@ -76,9 +76,21 @@ public class PLParser extends Parse{
     return null;
   }
   
-  public WNode mul(){ WNode r=value(); String s;
+  public WNode sgn(){ WNode r; String s;
+    if(parse(s="+") || parse(s="-")){ r=sgn();         
+        switch(s) {
+          case "+": r=new WExprPlus(r); break;
+          case "-": r=new WExprMinus(r); break;
+        }
+    }else{ 
+      r=value();
+    }      
+    return r;
+  }
+  
+  public WNode mul(){ WNode r=sgn(); String s;
     if(r!=null) {
-      while(parse(s="*") || parse(s="/")){ WNode v=value();
+      while(parse(s="*") || parse(s="/")){ WNode v=sgn();
         switch(s) {
           case "*": r=new WExprMul(r,v); break;
           case "/": r=new WExprDiv(r,v); break;

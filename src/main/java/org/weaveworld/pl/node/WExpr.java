@@ -4,6 +4,30 @@ import com.oracle.truffle.api.frame.VirtualFrame;
 
 public class WExpr {
   
+  public static abstract class WExprUnary extends WNode {
+    @Child WNode op, op1;
+
+    public WExprUnary(WNode op) {
+      this.op = op; 
+    }
+  }
+
+  public static class WExprPlus extends WExprUnary {
+    public WExprPlus(WNode op){ super(op); }
+
+    @Override public int executeInt(VirtualFrame frame) {
+      return op.executeInt(frame);
+    }
+  }
+  
+  public static class WExprMinus extends WExprUnary {
+    public WExprMinus(WNode op){ super(op); }
+
+    @Override public int executeInt(VirtualFrame frame) {
+      return -op.executeInt(frame);
+    }
+  }
+  
   public static abstract class WExprBinary extends WNode {
     @Child WNode op, op1;
 
